@@ -238,13 +238,13 @@ var forcast = /** @class */ (function () {
                          {
                             document.getElementById("today" + setDate).innerHTML = this.dateSet.getFutureDate(setDate + 1);
                         }
-                        this.date_fcast();
+                        this.dateForecast();
                         return [2 /*return*/, this.foreCastData];
                 }
             });
         });
     };
-    forcast.prototype.date_fcast = function () {
+    forcast.prototype.dateForecast = function () {
         var iterate, index;
         var minimumTemperature;
         var maximumTEmperature;

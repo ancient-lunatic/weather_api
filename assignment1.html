@@ -18,12 +18,12 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
 
-<style type="text/css">
-#hero {
-  background-image: url("/wi.jpg")
+<!-- <style type="text/css">
+ #hero {
+  content:url(wi.jpg);
 }
-</style>
-
+</style> 
+  -->
 
 
 
@@ -42,7 +42,7 @@
 </head>
 
 <body onload="new forcast().forcastWeather(); new CurrentLocation().searchCurrentLocation();">
-  <div class="container" id="hero">
+  <div class="container" >
 
     <div style="text-align:center">
       <h1 class="display-4 mb-4">cloud api</h1>
@@ -70,7 +70,7 @@
 
 
 
-      <select name="unit" id="dropdown1" onclick="new TemperatureUnit().temperatureSelect(); new forcast().forcast_weather()"
+      <select name="unit" id="dropdown1" onclick="new TemperatureUnit().temperatureSelect(); new forcast().forcastWeather()"
         class="btn btn-primary dropdown-toggle">
         <option value="Celsius">Celsius</option>
         <option value="kelvin">Kelvin</option>
@@ -203,14 +203,14 @@
   </div>
     <br>
 
-    <div class="container">
+    <div class="container" id= "hero">
       <p><img src="" class="rounded mx-auto d-block" id="imge"> </p>
-      <p id="name" class="container p-3 my-3 bg-dark text-white"> .</p>
-      <p id="description" class="container p-3 my-3 bg-dark text-white">. </p>
-      <p id="temperature" class="container p-3 my-3 bg-dark text-white"> .</p>
-      <p id="wind" class="container p-3 my-3 bg-dark text-white">. </p>
-      <p id="pressure" class="container p-3 my-3 bg-dark text-white">. </p>
-      <p id="humid" class="container p-3 my-3 bg-dark text-white"> .</p>
+      <p id="name" class="container p-3 my-3 bg-dark text-white"></p>
+      <p id="description" class="container p-3 my-3 bg-dark text-white"> </p>
+      <p id="temperature" class="container p-3 my-3 bg-dark text-white"> </p>
+      <p id="wind" class="container p-3 my-3 bg-dark text-white"> </p>
+      <p id="pressure" class="container p-3 my-3 bg-dark text-white"> </p>
+      <p id="humid" class="container p-3 my-3 bg-dark text-white"> </p>
     </div>
     </div>
     

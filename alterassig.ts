@@ -254,7 +254,7 @@ class forcast {
         }
 
 
-        this.date_fcast()
+        this.dateForecast()
         return this.foreCastData;
     }
 
@@ -262,7 +262,7 @@ class forcast {
 
 
 
-    date_fcast() {                          // put data inside the tags
+    dateForecast() {                          // put data inside the tags
         let iterate :number, index: number;
         let minimumTemperature: number;
         let maximumTEmperature: number;
