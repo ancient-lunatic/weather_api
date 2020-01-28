@@ -1,4 +1,3 @@
-
 class WeatherStackApi {
     temperature: number;
     waeatherImage: string;
@@ -25,23 +24,113 @@ class WeatherStackApi {
         this.windSpeed = dataa.current.wind_speed;
         this.weatherDescription = dataa.current.weather_descriptions[0];
         this.windDirection = dataa.current.wind_dir;
-        // while( this.dataa !== 'undefined');
     }
 
 }
+
+
+
 
 class OpenWeatherApi {
     name: string;
-    country : string;
+    country: string;
 
     constructor(data) {
         this.name = data.name;
-        this.country = data.sys.country;    
+        this.country = data.sys.country;
 
     }
 }
 
-class weather {
+
+
+
+
+class CurrentLocation {
+    State: string;
+    country: string
+
+
+    searchCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(this.showCurrentDimension)
+        }
+        else {
+            document.getElementById("long").innerHTML = "not supporting browser"
+        }
+
+    }
+
+
+    async showCurrentDimension(position) {
+        let apiRespond;
+        let apiData;
+        let weatherData;
+        console.log(position.coords.latitude, " direction ", position.coords.longitude);
+        apiRespond = await fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&appid=dba730857b382622664ad9914d2b7304');
+        apiData = await (apiRespond.json());
+        weatherData = new OpenWeatherApi(apiData);
+
+        this.State = weatherData.name;
+        this.country = weatherData.country;
+
+        console.log("runninj");
+        (document.getElementById("place") as HTMLDataElement).value = this.State + ", " + this.country;
+        return apiData;
+        // this.find()
+    }
+
+}
+
+
+
+
+
+
+class TemperatureUnit {
+    temperatureValue: string = 'Celsius';
+    tempratueUnit: string = 'm';
+
+    constructor() {
+        this.temperatureSelect();
+    }
+
+    temperatureUnitIndex() {
+        let tempratureUnitString = document.getElementById("dropdown1") as HTMLSelectElement;
+        let index;
+        for (index = 0; index < tempratureUnitString.options.length; index++) {
+            if (tempratureUnitString.options[index].selected === true) {
+                break
+            }
+        }
+        return index;
+
+    }
+
+    temperatureSelect() {
+
+        let index = this.temperatureUnitIndex();
+
+        if (index === 0) {
+            this.tempratueUnit = 'm'
+            this.temperatureValue = "Celsius";
+        }
+        else if (index === 1) {
+            this.tempratueUnit = 's'
+            this.temperatureValue = "Kelvin"
+        }
+        else if (index === 2) {
+            this.tempratueUnit = 'f'
+            this.temperatureValue = "fahrenheit";
+        }
+    }
+
+}
+
+
+
+
+class weather extends TemperatureUnit {
     temperature;
     description;
     weatherImage;
@@ -50,11 +139,12 @@ class weather {
     wind;
     pressure;
     humid;
-    unit;
-    temperatureValue: string = "Celsius";
+    // temperatureValue: string = "Celsius";
 
 
-    constructor(temperatureInitials = 'f') {
+    constructor() {
+        super();
+
         this.temperature = document.getElementById("temperature");
         this.description = document.getElementById("description") as HTMLParagraphElement;
         this.weatherImage = document.getElementById("imge") as HTMLImageElement;
@@ -63,149 +153,47 @@ class weather {
         this.wind = document.getElementById("wind");
         this.pressure = document.getElementById("pressure");
         this.humid = document.getElementById("humid");
-        this.unit = temperatureInitials;
+        // this.unit = tempratueUnit;
 
     }
 
 
-
-    temperatureUnitIndex() {
-        let x = document.getElementById("dropdown1") as HTMLSelectElement;
-        let index;
-        for (index = 0; index < x.options.length; index++) {
-            if (x.options[index].selected === true) {
-                break
-            }
-        }
-        return index;
-
-    }
-
-    temperature_unit() {
-
-        let index = this.temperatureUnitIndex();
-
-        if (index === 0) {
-            this.unit = 'm'
-            this.temperatureValue = "Celsius";
-        }
-        else if (index === 1) {
-            this.unit = 's'
-            this.temperatureValue = "Kelvin"
-        }
-        else if (index === 2) {
-            this.unit = 'f'
-            this.temperatureValue = "fahrenheit";
-        }
-        this.find();
-
-
-    }
-
-    current_loc() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(this.showPosition)
-        }
-        else {
-            document.getElementById("long").innerHTML = "not supporting browser"
-        }
-
-    }
-
-    async showPosition(position) {
-        let locapi: string;
-        let res;
-        let country;
+    async  findLoactionData() {
         let data;
-        let weatherData;
-        console.log(position.coords.latitude, " direction ", position.coords.longitude);
-        res = await fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&appid=dba730857b382622664ad9914d2b7304');
-        data = await (res.json());
-        weatherData = new OpenWeatherApi(data);
-
-        this.locate =weatherData.name;
-        country =weatherData.country;
-
-        console.log("runninj");
-        (document.getElementById("place") as HTMLDataElement).value = this.locate +", "+ country ;
-        this.find()
-        
-    }
-
-
-
-    async  find() {
-        let data;
-        let respond = await fetch('http://api.weatherstack.com/current?access_key=c55132a6234cad11948e6cd8a696ef04&query=' + this.locate + '&units=' + this.unit);
+        let respond = await fetch('http://api.weatherstack.com/current?access_key=a512b5255a5f4e11735e8cf7ebb61229&query=' + this.locate + '&units=' + this.tempratueUnit);
         data = await (respond.json());
-        let weatherData = new WeatherStackApi(data)
-        console.log(data)
-        {
 
-            this.description.innerHTML = "It's " + weatherData.weatherDescription;;
+        let weatherData = new WeatherStackApi(data) // data mapping 
+        console.log(data)
+            this.description.innerHTML = "It's " + weatherData.weatherDescription;                                     //put data in tags
             this.textBoxLocation.innerHTML = "your state is  " + weatherData.Location;
             this.temperature.innerHTML = "Temp => " + weatherData.temperature + " " + this.temperatureValue;
             this.wind.innerHTML = "wind speed => " + weatherData.windSpeed + " Kilometers/Hour";
             this.pressure.innerHTML = "wind pressure => " + weatherData.pressure + " Millibar";
             this.humid.innerHTML = "humidity =>   " + weatherData.humidity;
-
-
-
             this.weatherImage.src = weatherData.waeatherImage;
             return data
-        }
+        
 
     }
 
 }
-class forcast extends weather {
-    latitude: number = 0;
-    longitude: number = 0;
-    forCastData;
 
-    constructor() {
-        super();
-    }
 
-    async find_data() {
 
-        let respond = await fetch('http://api.weatherstack.com/current?access_key=c55132a6234cad11948e6cd8a696ef04&query=' + this.locate + '&units=' + this.unit);
-        let data = await (respond.json());
-        let weatherData = new WeatherStackApi(data)
 
-        this.latitude = weatherData.latitude;
-        this.longitude = weatherData.longitude;
-        console.log(this.latitude, this.longitude)
-        return data;
 
-    }
-
-    async forcast_weather() // assigning dates to the div 
+class FutureDate
+{
+    constructor()
     {
-        await this.find_data();
 
-        {
-            let res = await fetch("https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/38cf82d8f8bd31f46313477dd41f36d5/" + this.latitude + "," + this.longitude);
-            this.forCastData = await (res.json());
-            
-
-
-            // (document.getElementById("today") as HTMLElement).innerHTML = "today";
-            (document.getElementById("tommorow") as HTMLElement).innerHTML = "tommorow";
-            (document.getElementById("today1") as HTMLElement).innerHTML = this.curday(2);
-            (document.getElementById("today2") as HTMLElement).innerHTML = this.curday(3);
-            (document.getElementById("today3") as HTMLElement).innerHTML = this.curday(4);
-            (document.getElementById("today4") as HTMLElement).innerHTML = this.curday(5);
-            (document.getElementById("today5") as HTMLElement).innerHTML = this.curday(6);
-
-        }
-        this.date_fcast()
     }
-
-    curday(addDay): string {       //return date with addition to sp 
+    getFutureDate(addDay): string {       //return date with addition to sp 
         let today = new Date();
         let dd = today.getDate();
-        dd = dd + addDay;
+        today.setDate(today.getDate()+addDay)
+        dd = today.getDate();
         let mm = today.getMonth() + 1;
         let yyyy = today.getFullYear();
 
@@ -213,38 +201,99 @@ class forcast extends weather {
         return (dd + "-" + mm + "-" + yyyy);
     };
 
-    date_fcast() {
-        let i, index: number;
-        let val: string;
-        let min_temp: number;
-        let max_temp: number;
-        let unit = this.unit;
+
+
+}
+
+
+
+
+
+class forcast {
+
+    foreCastData;
+    dateSet
+    currentLocation
+    constructor() {
+        this.currentLocation = new weather();
+
+        this.dateSet = new FutureDate()
+    }
+
+
+
+    async findCurrentLocation() {
+
+        let respond = await fetch('http://api.weatherstack.com/current?access_key=a512b5255a5f4e11735e8cf7ebb61229&query=' + this.currentLocation.locate + '&units=' + this.currentLocation.tempratueUnit);
+        let data = await (respond.json());
+        return new WeatherStackApi(data);
+
+    }
+
+
+
+
+
+    async forcastWeather() // assigning dates to the div 
+    {
+        let weatherData = await this.findCurrentLocation();
+        
+        let setDate;
+
+        {
+            let res = await fetch("https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/38cf82d8f8bd31f46313477dd41f36d5/" + weatherData.latitude + "," + weatherData.longitude);
+            this.foreCastData = await (res.json());
+            
+            (document.getElementById("tommorow") as HTMLElement).innerHTML = "tommorow";
+            
+            for (setDate = 1; setDate<6 ; setDate++ )                                       // setting future dates on the button tags 
+            {
+                (document.getElementById("today"+setDate) as HTMLElement).innerHTML = this.dateSet.getFutureDate(setDate+1);
+            }
+    
+        }
+
+
+        this.date_fcast()
+        return this.foreCastData;
+    }
+
+    
+
+
+
+    date_fcast() {                          // put data inside the tags
+        let iterate :number, index: number;
+        let minimumTemperature: number;
+        let maximumTEmperature: number;
         let windSpeed: number;
-        let icon: string;
+        let ForecastIcon: string;
 
 
-        index = this.temperatureUnitIndex()
-        for (i = 1; i < 7; i++) {
-            icon = "https://darksky.net/images/weather-icons/" + this.forCastData["daily"]["data"][i]["icon"] + ".png";
-            min_temp = this.forCastData["daily"]["data"][i]["temperatureMin"];
-            max_temp = this.forCastData["daily"]["data"][i]["temperatureMax"];
-            windSpeed = this.forCastData["daily"]["data"][i]["windSpeed"];
+        index = new TemperatureUnit().temperatureUnitIndex()
+
+        for (iterate = 1; iterate < 7; iterate++) {
+            ForecastIcon = "https://darksky.net/images/weather-icons/" + this.foreCastData["daily"]["data"][iterate]["icon"] + ".png";
+            minimumTemperature = this.foreCastData["daily"]["data"][iterate]["temperatureMin"];
+            maximumTEmperature = this.foreCastData["daily"]["data"][iterate]["temperatureMax"];
+            windSpeed = this.foreCastData["daily"]["data"][iterate]["windSpeed"];
 
 
-            (document.getElementById("icon" + i) as HTMLImageElement).src = icon;
-            (document.getElementById("summery" + i) as HTMLElement).innerHTML = "summery :- " + this.forCastData["daily"]["data"][i]["summary"];
-            if (index < 2) {
-                (document.getElementById("mintemp" + i) as HTMLElement).innerHTML = "minimum temperature:-   " + this.convert(min_temp) + " celsius";
-                (document.getElementById("maxtemp" + i) as HTMLElement).innerHTML = "maximum temperature:-    " + this.convert(max_temp) + " celsius";
+            (document.getElementById("icon" + iterate) as HTMLImageElement).src = ForecastIcon;
+            (document.getElementById("summery" + iterate) as HTMLElement).innerHTML = "summery :- " + this.foreCastData["daily"]["data"][iterate]["summary"];
+                if (index < 2) 
+                {
+                        (document.getElementById("mintemp" + iterate) as HTMLElement).innerHTML = "minimum temperature:-   " + this.convert(minimumTemperature) + " celsius";
+                        (document.getElementById("maxtemp" + iterate) as HTMLElement).innerHTML = "maximum temperature:-    " + this.convert(maximumTEmperature) + " celsius";
 
-            }
-            else {
-                (document.getElementById("mintemp" + i) as HTMLElement).innerHTML = "minimum temperature:- " + min_temp + " fahrenheit";
-                (document.getElementById("maxtemp" + i) as HTMLElement).innerHTML = "maximum temperature:- " + max_temp + " fahrenheit";
-                console.log("ferenheit");
-
-            }
-            (document.getElementById("ws" + i) as HTMLElement).innerHTML = "Wind speed :- " + windSpeed + " Kilometers/Hour"
+                }
+                else 
+                {
+                        (document.getElementById("mintemp" + iterate) as HTMLElement).innerHTML = "minimum temperature:- " + minimumTemperature + " fahrenheit";
+                        (document.getElementById("maxtemp" + iterate) as HTMLElement).innerHTML = "maximum temperature:- " + maximumTEmperature + " fahrenheit";
+                        console.log("ferenheit");
+                }
+            (document.getElementById("ws" + iterate) as HTMLElement).innerHTML = "Wind speed :- " + windSpeed + " Kilometers/Hour"
         }
     }
     convert(degree: number): string {

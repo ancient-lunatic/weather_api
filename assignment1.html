@@ -41,7 +41,7 @@
   </script>
 </head>
 
-<body onload="new forcast().forcast_weather(); new weather().current_loc()">
+<body onload="new forcast().forcastWeather(); new CurrentLocation().searchCurrentLocation();">
   <div class="container" id="hero">
 
     <div style="text-align:center">
@@ -50,8 +50,10 @@
     <div class="input-group">
       <input class="form-control" placeholder="@type you city" type="search" name="weather" value="faridabad" id="place"
         onkeypress="activate_places();">
-      <button class="btn btn-primary" type="button" onclick="new weather().find()"> <span class="" aria-hidden="true">
+      <button class="btn btn-primary" type="button" onclick="new weather().findLoactionData()"> 
+        <span class="" aria-hidden="true">
         </span> Search!</button>
+        <p id ="long"></p>
     </div>
     <br>
 
@@ -61,14 +63,14 @@
     <div class="container">
 
       <input class="btn btn-primary" type="submit" name="current_location" value="current location"
-        onclick="new weather().current_loc()">
+        onclick="new CurrentLocation().searchCurrentLocation()">
 
       <input class="btn btn-primary" type="submit" name="weather_forcast" value="weather forcast"
-        onclick="new forcast().forcast_weather()">
+        onclick="new forcast().forcastWeather()">
 
 
 
-      <select name="unit" id="dropdown1" onclick="new weather().temperature_unit(); new forcast().forcast_weather()"
+      <select name="unit" id="dropdown1" onclick="new TemperatureUnit().temperatureSelect(); new forcast().forcast_weather()"
         class="btn btn-primary dropdown-toggle">
         <option value="Celsius">Celsius</option>
         <option value="kelvin">Kelvin</option>

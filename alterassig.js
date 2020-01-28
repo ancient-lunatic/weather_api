@@ -59,7 +59,6 @@ var WeatherStackApi = /** @class */ (function () {
         this.windSpeed = dataa.current.wind_speed;
         this.weatherDescription = dataa.current.weather_descriptions[0];
         this.windDirection = dataa.current.wind_dir;
-        // while( this.dataa !== 'undefined');
     }
     return WeatherStackApi;
 }());
@@ -70,204 +69,209 @@ var OpenWeatherApi = /** @class */ (function () {
     }
     return OpenWeatherApi;
 }());
-var weather = /** @class */ (function () {
-    function weather(temperatureInitials) {
-        if (temperatureInitials === void 0) { temperatureInitials = 'f'; }
-        this.temperatureValue = "Celsius";
-        this.temperature = document.getElementById("temperature");
-        this.description = document.getElementById("description");
-        this.weatherImage = document.getElementById("imge");
-        this.locate = (document.getElementById("place").value);
-        this.textBoxLocation = document.getElementById("name");
-        this.wind = document.getElementById("wind");
-        this.pressure = document.getElementById("pressure");
-        this.humid = document.getElementById("humid");
-        this.unit = temperatureInitials;
+var CurrentLocation = /** @class */ (function () {
+    function CurrentLocation() {
     }
-    weather.prototype.temperatureUnitIndex = function () {
-        var x = document.getElementById("dropdown1");
-        var index;
-        for (index = 0; index < x.options.length; index++) {
-            if (x.options[index].selected === true) {
-                break;
-            }
-        }
-        return index;
-    };
-    weather.prototype.temperature_unit = function () {
-        var index = this.temperatureUnitIndex();
-        if (index === 0) {
-            this.unit = 'm';
-            this.temperatureValue = "Celsius";
-        }
-        else if (index === 1) {
-            this.unit = 's';
-            this.temperatureValue = "Kelvin";
-        }
-        else if (index === 2) {
-            this.unit = 'f';
-            this.temperatureValue = "fahrenheit";
-        }
-        this.find();
-    };
-    weather.prototype.current_loc = function () {
+    CurrentLocation.prototype.searchCurrentLocation = function () {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(this.showPosition);
+            navigator.geolocation.getCurrentPosition(this.showCurrentDimension);
         }
         else {
             document.getElementById("long").innerHTML = "not supporting browser";
         }
     };
-    weather.prototype.showPosition = function (position) {
+    CurrentLocation.prototype.showCurrentDimension = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var locapi, res, country, data, weatherData;
+            var apiRespond, apiData, weatherData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         console.log(position.coords.latitude, " direction ", position.coords.longitude);
                         return [4 /*yield*/, fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&appid=dba730857b382622664ad9914d2b7304')];
                     case 1:
-                        res = _a.sent();
-                        return [4 /*yield*/, (res.json())];
+                        apiRespond = _a.sent();
+                        return [4 /*yield*/, (apiRespond.json())];
                     case 2:
-                        data = _a.sent();
-                        weatherData = new OpenWeatherApi(data);
-                        this.locate = weatherData.name;
-                        country = weatherData.country;
+                        apiData = _a.sent();
+                        weatherData = new OpenWeatherApi(apiData);
+                        this.State = weatherData.name;
+                        this.country = weatherData.country;
                         console.log("runninj");
-                        document.getElementById("place").value = this.locate + ", " + country;
-                        this.find();
-                        return [2 /*return*/];
+                        document.getElementById("place").value = this.State + ", " + this.country;
+                        return [2 /*return*/, apiData];
                 }
             });
         });
     };
-    weather.prototype.find = function () {
+    return CurrentLocation;
+}());
+var TemperatureUnit = /** @class */ (function () {
+    function TemperatureUnit() {
+        this.temperatureValue = 'Celsius';
+        this.tempratueUnit = 'm';
+        this.temperatureSelect();
+    }
+    TemperatureUnit.prototype.temperatureUnitIndex = function () {
+        var tempratureUnitString = document.getElementById("dropdown1");
+        var index;
+        for (index = 0; index < tempratureUnitString.options.length; index++) {
+            if (tempratureUnitString.options[index].selected === true) {
+                break;
+            }
+        }
+        return index;
+    };
+    TemperatureUnit.prototype.temperatureSelect = function () {
+        var index = this.temperatureUnitIndex();
+        if (index === 0) {
+            this.tempratueUnit = 'm';
+            this.temperatureValue = "Celsius";
+        }
+        else if (index === 1) {
+            this.tempratueUnit = 's';
+            this.temperatureValue = "Kelvin";
+        }
+        else if (index === 2) {
+            this.tempratueUnit = 'f';
+            this.temperatureValue = "fahrenheit";
+        }
+    };
+    return TemperatureUnit;
+}());
+var weather = /** @class */ (function (_super) {
+    __extends(weather, _super);
+    // temperatureValue: string = "Celsius";
+    function weather() {
+        var _this = _super.call(this) || this;
+        _this.temperature = document.getElementById("temperature");
+        _this.description = document.getElementById("description");
+        _this.weatherImage = document.getElementById("imge");
+        _this.locate = (document.getElementById("place").value);
+        _this.textBoxLocation = document.getElementById("name");
+        _this.wind = document.getElementById("wind");
+        _this.pressure = document.getElementById("pressure");
+        _this.humid = document.getElementById("humid");
+        return _this;
+        // this.unit = tempratueUnit;
+    }
+    weather.prototype.findLoactionData = function () {
         return __awaiter(this, void 0, void 0, function () {
             var data, respond, weatherData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, fetch('http://api.weatherstack.com/current?access_key=c55132a6234cad11948e6cd8a696ef04&query=' + this.locate + '&units=' + this.unit)];
+                    case 0: return [4 /*yield*/, fetch('http://api.weatherstack.com/current?access_key=a512b5255a5f4e11735e8cf7ebb61229&query=' + this.locate + '&units=' + this.tempratueUnit)];
                     case 1:
                         respond = _a.sent();
                         return [4 /*yield*/, (respond.json())];
                     case 2:
                         data = _a.sent();
-                        weatherData = new WeatherStackApi(data);
+                        weatherData = new WeatherStackApi(data) // data mapping 
+                        ;
                         console.log(data);
-                        {
-                            this.description.innerHTML = "It's " + weatherData.weatherDescription;
-                            ;
-                            this.textBoxLocation.innerHTML = "your state is  " + weatherData.Location;
-                            this.temperature.innerHTML = "Temp => " + weatherData.temperature + " " + this.temperatureValue;
-                            this.wind.innerHTML = "wind speed => " + weatherData.windSpeed + " Kilometers/Hour";
-                            this.pressure.innerHTML = "wind pressure => " + weatherData.pressure + " Millibar";
-                            this.humid.innerHTML = "humidity =>   " + weatherData.humidity;
-                            this.weatherImage.src = weatherData.waeatherImage;
-                            return [2 /*return*/, data];
-                        }
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return weather;
-}());
-var forcast = /** @class */ (function (_super) {
-    __extends(forcast, _super);
-    function forcast() {
-        var _this = _super.call(this) || this;
-        _this.latitude = 0;
-        _this.longitude = 0;
-        return _this;
-    }
-    forcast.prototype.find_data = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var respond, data, weatherData;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, fetch('http://api.weatherstack.com/current?access_key=c55132a6234cad11948e6cd8a696ef04&query=' + this.locate + '&units=' + this.unit)];
-                    case 1:
-                        respond = _a.sent();
-                        return [4 /*yield*/, (respond.json())];
-                    case 2:
-                        data = _a.sent();
-                        weatherData = new WeatherStackApi(data);
-                        this.latitude = weatherData.latitude;
-                        this.longitude = weatherData.longitude;
-                        console.log(this.latitude, this.longitude);
+                        this.description.innerHTML = "It's " + weatherData.weatherDescription; //put data in tags
+                        this.textBoxLocation.innerHTML = "your state is  " + weatherData.Location;
+                        this.temperature.innerHTML = "Temp => " + weatherData.temperature + " " + this.temperatureValue;
+                        this.wind.innerHTML = "wind speed => " + weatherData.windSpeed + " Kilometers/Hour";
+                        this.pressure.innerHTML = "wind pressure => " + weatherData.pressure + " Millibar";
+                        this.humid.innerHTML = "humidity =>   " + weatherData.humidity;
+                        this.weatherImage.src = weatherData.waeatherImage;
                         return [2 /*return*/, data];
                 }
             });
         });
     };
-    forcast.prototype.forcast_weather = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var res, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.find_data()];
-                    case 1:
-                        _b.sent();
-                        return [4 /*yield*/, fetch("https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/38cf82d8f8bd31f46313477dd41f36d5/" + this.latitude + "," + this.longitude)];
-                    case 2:
-                        res = _b.sent();
-                        _a = this;
-                        return [4 /*yield*/, (res.json())];
-                    case 3:
-                        _a.forCastData = _b.sent();
-                        // (document.getElementById("today") as HTMLElement).innerHTML = "today";
-                        document.getElementById("tommorow").innerHTML = "tommorow";
-                        document.getElementById("today1").innerHTML = this.curday(2);
-                        document.getElementById("today2").innerHTML = this.curday(3);
-                        document.getElementById("today3").innerHTML = this.curday(4);
-                        document.getElementById("today4").innerHTML = this.curday(5);
-                        document.getElementById("today5").innerHTML = this.curday(6);
-                        this.date_fcast();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    forcast.prototype.curday = function (addDay) {
+    return weather;
+}(TemperatureUnit));
+var FutureDate = /** @class */ (function () {
+    function FutureDate() {
+    }
+    FutureDate.prototype.getFutureDate = function (addDay) {
         var today = new Date();
         var dd = today.getDate();
-        dd = dd + addDay;
+        today.setDate(today.getDate() + addDay);
+        dd = today.getDate();
         var mm = today.getMonth() + 1;
         var yyyy = today.getFullYear();
         return (dd + "-" + mm + "-" + yyyy);
     };
     ;
+    return FutureDate;
+}());
+var forcast = /** @class */ (function () {
+    function forcast() {
+        this.currentLocation = new weather();
+        this.dateSet = new FutureDate();
+    }
+    forcast.prototype.findCurrentLocation = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var respond, data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, fetch('http://api.weatherstack.com/current?access_key=a512b5255a5f4e11735e8cf7ebb61229&query=' + this.currentLocation.locate + '&units=' + this.currentLocation.tempratueUnit)];
+                    case 1:
+                        respond = _a.sent();
+                        return [4 /*yield*/, (respond.json())];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, new WeatherStackApi(data)];
+                }
+            });
+        });
+    };
+    forcast.prototype.forcastWeather = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var weatherData, setDate, res, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.findCurrentLocation()];
+                    case 1:
+                        weatherData = _b.sent();
+                        return [4 /*yield*/, fetch("https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/38cf82d8f8bd31f46313477dd41f36d5/" + weatherData.latitude + "," + weatherData.longitude)];
+                    case 2:
+                        res = _b.sent();
+                        _a = this;
+                        return [4 /*yield*/, (res.json())];
+                    case 3:
+                        _a.foreCastData = _b.sent();
+                        document.getElementById("tommorow").innerHTML = "tommorow";
+                        for (setDate = 1; setDate < 6; setDate++) // setting future dates on the button tags 
+                         {
+                            document.getElementById("today" + setDate).innerHTML = this.dateSet.getFutureDate(setDate + 1);
+                        }
+                        this.date_fcast();
+                        return [2 /*return*/, this.foreCastData];
+                }
+            });
+        });
+    };
     forcast.prototype.date_fcast = function () {
-        var i, index;
-        var val;
-        var min_temp;
-        var max_temp;
-        var unit = this.unit;
+        var iterate, index;
+        var minimumTemperature;
+        var maximumTEmperature;
         var windSpeed;
-        var icon;
-        index = this.temperatureUnitIndex();
-        for (i = 1; i < 7; i++) {
-            icon = "https://darksky.net/images/weather-icons/" + this.forCastData["daily"]["data"][i]["icon"] + ".png";
-            min_temp = this.forCastData["daily"]["data"][i]["temperatureMin"];
-            max_temp = this.forCastData["daily"]["data"][i]["temperatureMax"];
-            windSpeed = this.forCastData["daily"]["data"][i]["windSpeed"];
-            document.getElementById("icon" + i).src = icon;
-            document.getElementById("summery" + i).innerHTML = "summery :- " + this.forCastData["daily"]["data"][i]["summary"];
+        var ForecastIcon;
+        index = new TemperatureUnit().temperatureUnitIndex();
+        for (iterate = 1; iterate < 7; iterate++) {
+            ForecastIcon = "https://darksky.net/images/weather-icons/" + this.foreCastData["daily"]["data"][iterate]["icon"] + ".png";
+            minimumTemperature = this.foreCastData["daily"]["data"][iterate]["temperatureMin"];
+            maximumTEmperature = this.foreCastData["daily"]["data"][iterate]["temperatureMax"];
+            windSpeed = this.foreCastData["daily"]["data"][iterate]["windSpeed"];
+            document.getElementById("icon" + iterate).src = ForecastIcon;
+            document.getElementById("summery" + iterate).innerHTML = "summery :- " + this.foreCastData["daily"]["data"][iterate]["summary"];
             if (index < 2) {
-                document.getElementById("mintemp" + i).innerHTML = "minimum temperature:-   " + this.convert(min_temp) + " celsius";
-                document.getElementById("maxtemp" + i).innerHTML = "maximum temperature:-    " + this.convert(max_temp) + " celsius";
+                document.getElementById("mintemp" + iterate).innerHTML = "minimum temperature:-   " + this.convert(minimumTemperature) + " celsius";
+                document.getElementById("maxtemp" + iterate).innerHTML = "maximum temperature:-    " + this.convert(maximumTEmperature) + " celsius";
             }
             else {
-                document.getElementById("mintemp" + i).innerHTML = "minimum temperature:- " + min_temp + " fahrenheit";
-                document.getElementById("maxtemp" + i).innerHTML = "maximum temperature:- " + max_temp + " fahrenheit";
+                document.getElementById("mintemp" + iterate).innerHTML = "minimum temperature:- " + minimumTemperature + " fahrenheit";
+                document.getElementById("maxtemp" + iterate).innerHTML = "maximum temperature:- " + maximumTEmperature + " fahrenheit";
                 console.log("ferenheit");
             }
-            document.getElementById("ws" + i).innerHTML = "Wind speed :- " + windSpeed + " Kilometers/Hour";
+            document.getElementById("ws" + iterate).innerHTML = "Wind speed :- " + windSpeed + " Kilometers/Hour";
         }
     };
     forcast.prototype.convert = function (degree) {
         return ((degree - 32) * 5 / 9).toFixed(2);
     };
     return forcast;
-}(weather));
+}());
