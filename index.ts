@@ -6,40 +6,40 @@ import { TemperatureUnit } from "./TemperatureUnitScroll";
 import { FutureDate } from "./CalculateFutureDate";
 import { CurrentLocation } from "./CurrentActuallocation";
 
-
-function pageLoad()
+class Indexfunction
 {
-    currentWeatherClick();
-    weatherForecastClick();
+
+pageLoad()
+{
+    this.currentWeatherClick();
+    this.weatherForecastClick();
+    this.searchButton();
 }
 
-function searchButton()
+searchButton()
 {
     new Weather().findLoactionData();
 }
 
-function currentWeatherClick()
+currentWeatherClick()
 {
     new CurrentLocation().searchCurrentLocation();
 }
 
 
-function weatherForecastClick()
+weatherForecastClick()
 {
     new Forcast().forcastWeather();
 }
 
 
-function setUnitType()
+setUnitType()
 {
     new TemperatureUnit().temperatureSelect();
-    weatherForecastClick();
+    this.weatherForecastClick();
+    this.searchButton();    
 }
 
+}
 
-
-(<any>window).pageLoad = pageLoad;
-(<any>window).searchButton = searchButton;
-(<any>window).currentWeatherClick = currentWeatherClick;
-(<any>window).weatherForecastClick = weatherForecastClick;
-(<any>window).setUnitType = setUnitType;
+(<any>window).Indexfunction = Indexfunction;

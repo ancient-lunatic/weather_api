@@ -41,7 +41,7 @@
   </script>
 </head>
 
-<body onload=" pageLoad();">
+<body onload=" new Indexfunction().pageLoad();">
   <div class="container" >
 
     <div style="text-align:center">
@@ -50,7 +50,7 @@
     <div class="input-group">
       <input class="form-control" placeholder="@type you city" type="search" name="weather" value="faridabad" id="place"
         onkeypress="activate_places();">
-      <button class="btn btn-primary" type="button" onclick="searchButton();"> 
+      <button class="btn btn-primary" type="button" onclick="new Indexfunction().searchButton();"> 
         <span class="" aria-hidden="true">
         </span> Search!</button>
         <p id ="long"></p>
@@ -63,14 +63,14 @@
     <div class="container">
 
       <input class="btn btn-primary" type="submit" name="current_location" value="current location"
-        onclick="currentWeatherClick();">
+        onclick="new Indexfunction().currentWeatherClick();">
 
       <input class="btn btn-primary" type="submit" name="weather_forcast" value="weather forcast"
-        onclick="weatherForecastClick()">
+        onclick="new Indexfunction().weatherForecastClick()">
 
 
 
-      <select name="unit" id="dropdown1" onclick="setUnitType()" class="btn btn-primary dropdown-toggle">
+      <select name="unit" id="dropdown1" onclick="new Indexfunction().setUnitType()" class="btn btn-primary dropdown-toggle">
         <option value="Celsius">Celsius</option>
         <option value="kelvin">Kelvin</option>
         <option value="Fahrenheit">Fahrenheit</option>
