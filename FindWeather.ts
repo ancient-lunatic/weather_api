@@ -17,7 +17,6 @@ export class Weather extends TemperatureUnit {
 
     constructor() {
         super();
-
         this.temperature = document.getElementById("temperature");
         this.description = document.getElementById("description") as HTMLParagraphElement;
         this.weatherImage = document.getElementById("imge") as HTMLImageElement;
@@ -31,22 +30,22 @@ export class Weather extends TemperatureUnit {
     }
 
 
-    async  findLoactionData() {
-        let data;
-        let respond = await fetch('http://api.weatherstack.com/current?access_key=a512b5255a5f4e11735e8cf7ebb61229&query=' + this.locate + '&units=' + this.tempratueUnit);
-        data = await (respond.json());
+    async  setLoactionData() {
 
-        let weatherData = new WeatherStackApi(data) // data mapping 
-        console.log(data)
-            this.description.innerHTML = "It's " + weatherData.weatherDescription;                                     //put data in tags
-            this.textBoxLocation.innerHTML = "your state is  " + weatherData.Location;
-            this.temperature.innerHTML = "Temp => " + weatherData.temperature + " " + this.temperatureValue;
-            this.wind.innerHTML = "wind speed => " + weatherData.windSpeed + " Kilometers/Hour";
-            this.pressure.innerHTML = "wind pressure => " + weatherData.pressure + " Millibar";
-            this.humid.innerHTML = "humidity =>   " + weatherData.humidity;
-            this.weatherImage.src = weatherData.waeatherImage;
-            return data
+        const respond = await fetch('http://api.weatherstack.com/current?access_key=a512b5255a5f4e11735e8cf7ebb61229&query=' + this.locate + '&units=' + this.tempratueUnit);
+        const data = await (respond.json());
+
+        const weatherData = new WeatherStackApi(data) // data mapping 
         
+        this.description.innerHTML = "It's " + weatherData.weatherDescription;                     
+        this.textBoxLocation.innerHTML = "your state is  " + weatherData.Location;
+        this.temperature.innerHTML = "Temp => " + weatherData.temperature + " " + this.temperatureValue;
+        this.wind.innerHTML = "wind speed => " + weatherData.windSpeed + " Kilometers/Hour";
+        this.pressure.innerHTML = "wind pressure => " + weatherData.pressure + " Millibar";
+        this.humid.innerHTML = "humidity =>   " + weatherData.humidity;
+        this.weatherImage.src = weatherData.waeatherImage;
+        return data
+    
 
     }
 

@@ -6,6 +6,7 @@
 
   <script type="text/javascript"
     src="http://maps.googleapis.com/maps/api/js?v=3&sensor=false&libraries=places&key=AIzaSyDsWPPDsd5FLHRs1bJU_d0L-YkGdVSYWSY"></script>
+    
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -41,7 +42,7 @@
   </script>
 </head>
 
-<body onload=" new Indexfunction().pageLoad();">
+<body onload=" new IndexClass().pageLoad();">
   <div class="container" >
 
     <div style="text-align:center">
@@ -50,7 +51,7 @@
     <div class="input-group">
       <input class="form-control" placeholder="@type you city" type="search" name="weather" value="faridabad" id="place"
         onkeypress="activate_places();">
-      <button class="btn btn-primary" type="button" onclick="new Indexfunction().searchButton();"> 
+      <button class="btn btn-primary" type="button" onclick="new IndexClass().searchButton();"> 
         <span class="" aria-hidden="true">
         </span> Search!</button>
         <p id ="long"></p>
@@ -63,14 +64,14 @@
     <div class="container">
 
       <input class="btn btn-primary" type="submit" name="current_location" value="current location"
-        onclick="new Indexfunction().currentWeatherClick();">
+        onclick="new IndexClass().currentWeatherClick();">
 
       <input class="btn btn-primary" type="submit" name="weather_forcast" value="weather forcast"
-        onclick="new Indexfunction().weatherForecastClick()">
+        onclick="new IndexClass().weatherForecastClick()">
 
 
 
-      <select name="unit" id="dropdown1" onclick="new Indexfunction().setUnitType()" class="btn btn-primary dropdown-toggle">
+      <select name="unit" id="dropdown1" onclick="new IndexClass().setUnitType()" class="btn btn-primary dropdown-toggle">
         <option value="Celsius">Celsius</option>
         <option value="kelvin">Kelvin</option>
         <option value="Fahrenheit">Fahrenheit</option>
@@ -105,7 +106,7 @@
     <div class="collapse" id="collapseExample1">
       <div class="card card-body" style="background-color:#b3e6ff">
         <p id=""></p>
-        <img src="" id="icon2"  height="84" width="84" class="rounded mx-auto d-block">
+        <img src="" id="icon2"  height="84" width="84" class="rounded mx-auto d-block" draggable="true">
         <p id ="summery2"> </p>
         <p id ="mintemp2"> </p>
         <p id="maxtemp2"> </p>

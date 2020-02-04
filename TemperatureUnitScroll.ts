@@ -1,15 +1,12 @@
-
-
-
 export class TemperatureUnit {
     temperatureValue: string = 'Celsius';
     tempratueUnit: string = 'm';
 
     constructor() {
-        this.temperatureSelect();
+        this.setTemperatureUnit();
     }
 
-    temperatureUnitIndex() {
+    getTemperatureUnitIndex() {
         let tempratureUnitString = document.getElementById("dropdown1") as HTMLSelectElement;
         let index;
         for (index = 0; index < tempratureUnitString.options.length; index++) {
@@ -21,9 +18,9 @@ export class TemperatureUnit {
 
     }
 
-    temperatureSelect() {
+    setTemperatureUnit() {
 
-        let index = this.temperatureUnitIndex();
+        const index = this.getTemperatureUnitIndex();
 
         if (index === 0) {
             this.tempratueUnit = 'm'

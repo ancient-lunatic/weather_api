@@ -1,4 +1,4 @@
-import { Forcast } from "./ForecastWeather";
+import {ForcastWeather } from "./ForecastWeather";
 import { WeatherStackApi } from "./WeatherStackApi";
 import { OpenWeatherApi } from "./OpenWeatherApi";
 import { Weather } from "./FindWeather";
@@ -6,7 +6,9 @@ import { TemperatureUnit } from "./TemperatureUnitScroll";
 import { FutureDate } from "./CalculateFutureDate";
 import { CurrentLocation } from "./CurrentActuallocation";
 
-class Indexfunction
+
+
+class IndexClass
 {
 
 pageLoad()
@@ -18,7 +20,7 @@ pageLoad()
 
 searchButton()
 {
-    new Weather().findLoactionData();
+    new Weather().setLoactionData();
 }
 
 currentWeatherClick()
@@ -29,17 +31,17 @@ currentWeatherClick()
 
 weatherForecastClick()
 {
-    new Forcast().forcastWeather();
+    new ForcastWeather().setDataOnHTMLPage();
 }
 
 
 setUnitType()
 {
-    new TemperatureUnit().temperatureSelect();
+    new TemperatureUnit().setTemperatureUnit();
     this.weatherForecastClick();
     this.searchButton();    
 }
 
 }
 
-(<any>window).Indexfunction = Indexfunction;
+(<any>window).IndexClass = IndexClass;
